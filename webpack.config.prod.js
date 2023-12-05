@@ -1,5 +1,6 @@
-const path = require('path');
-const CleanPlugin = require('clean-webpack-plugin');
+const path = require('path')
+const CleanPlugin = require('clean-webpack-plugin')
+const fs = require('fs-extra')
 
 module.exports = {
   mode: 'production',
@@ -20,5 +21,18 @@ module.exports = {
   resolve: {
     extensions: ['.ts', '.js'],
   },
-  plugins: [new CleanPlugin.CleanWebpackPlugin()],
-};
+  plugins: [
+    new CleanPlugin.CleanWebpackPlugin({
+      cleanOnceBeforeBuildPatterns: [
+        '**/*',
+        '!index.html',
+        '!app.css',
+        '!public{,/**/*}',
+      ],
+    }),
+  ],
+}
+
+fs.copySync('index.html', 'dist/index.html')
+fs.copySync('app.css', 'dist/app.css')
+fs.copySync('public/favicon.ico', 'dist/public/favicon.ico')
